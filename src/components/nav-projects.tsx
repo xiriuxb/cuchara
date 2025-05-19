@@ -1,41 +1,46 @@
-"use client"
+"use client";
 
-import {
-  type LucideIcon,
-} from "lucide-react"
+import { type LucideIcon } from "lucide-react";
 
 import {
   SidebarGroup,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import Link from "next/link"
+} from "@/components/ui/sidebar";
+import { ConditionalLink } from "./ConditionalLink";
+import Link from "next/link";
 
 export function NavProjects({
   projects,
 }: {
   projects: {
-    name: string
-    url: string
-    icon: LucideIcon
-  }[]
+    name: string;
+    url: string;
+    icon: LucideIcon;
+  }[];
 }) {
-
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarMenu>
         {projects.map((item) => (
           <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton asChild className="bg-red-50 text-base">
-              <Link href={item.url} className="py-6 px-4">
-                <item.icon />
-                <span>{item.name}</span>
-              </Link>
+            <SidebarMenuButton asChild className="text-base">
+              {item.url === "/" ? (
+                <Link href={item.url} className="py-6 px-4">
+                  <item.icon />
+                  <span>{item.name}</span>
+                </Link>
+              ) : (
+                <ConditionalLink href={item.url} className="py-6 px-4">
+                  <item.icon />
+                  <span>{item.name}</span>
+                </ConditionalLink>
+              )}
             </SidebarMenuButton>
           </SidebarMenuItem>
         ))}
       </SidebarMenu>
     </SidebarGroup>
-  )
+  );
 }

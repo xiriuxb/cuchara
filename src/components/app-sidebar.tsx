@@ -11,11 +11,9 @@ import {
 } from "lucide-react"
 
 import { NavProjects } from "@/components/nav-projects"
-import { NavUser } from "@/components/nav-user"
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
   SidebarRail,
   SidebarTrigger,
@@ -31,12 +29,12 @@ const data = {
   projects: [
     {
       name: "Home",
-      url: "#",
+      url: "/",
       icon: Home,
     },
     {
       name: "Posts",
-      url: "#",
+      url: "/post",
       icon: GalleryVertical,
     },
     {
@@ -72,9 +70,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavProjects projects={data.projects} />
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={data.user} />
-      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   )
