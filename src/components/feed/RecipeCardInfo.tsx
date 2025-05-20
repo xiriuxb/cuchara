@@ -9,7 +9,7 @@ export default function RecipeCardInfo({
   return (
     <div className="md:max-w-[900px] flex flex-col w-full bg-sidebar border rounded-sm mb-3">
       <div className="flex justify-between items-center px-5 py-3">
-        <ConditionalLink href={`/`} className="text-sm font-semibold">
+        <ConditionalLink href={`/user/${recipeInfo.user.user_name}`} className="text-sm font-semibold">
           @{recipeInfo.user.user_name}
         </ConditionalLink>
         <p id="date" className="text-sm sm:p-0">

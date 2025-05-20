@@ -47,6 +47,11 @@ export interface RecipeResponse {
   nextCursor?: string;
 }
 
+export interface PaginatedResponse<T> {
+  data: T[];
+  nextCursor?: string;
+}
+
 export class RecipeService {
   private static readonly API_URL = process.env.NEXT_PUBLIC_API_URL;
   private static readonly api = axios.create({
@@ -138,6 +143,28 @@ export class RecipeService {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
+      });
+      return data;
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        throw {
+          message: error.response?.data?.message || error.message,
+          status: error.response?.status,
+        } as ApiError;
+      }
+      throw {
+        message: 'An unexpected error occurred',
+      } as ApiError;
+    }
+  }
+
+  static async getUserRecipes(username: string, token: string, cursor?: string): Promise<PaginatedResponse<Recipe>> {
+    try {
+      const { data } = await this.api.get<PaginatedResponse<Recipe>>(`/recipes/user/${username}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        params: { cursor },
       });
       return data;
     } catch (error: unknown) {

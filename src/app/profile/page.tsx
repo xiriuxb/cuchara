@@ -9,6 +9,7 @@ import { Edit, Check, X } from "lucide-react";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import MyRecipes from "@/components/profile/MyRecipes";
+import { ProfileSkeleton } from "@/components/profile/ProfileSkeleton";
 
 export default function ProfilePage() {
   const { data: profile, isPending, error, updateProfile } = useProfile();
@@ -19,7 +20,7 @@ export default function ProfilePage() {
         <RedirectToSignIn />
       </SignedOut>
       <SignedIn>
-        {isPending && <div>Cargando perfil...</div>}
+        {isPending && <ProfileSkeleton />}
         {error && <div>Error: {error.message}</div>}
         {profile && (
           <section className="container mx-auto py-2 max-w-4xl">
@@ -31,15 +32,14 @@ export default function ProfilePage() {
                 </Avatar>
                 <section className="flex flex-col justify-between py-3">
                   <span className="font-bold">{`@${profile.username}`}</span>
-                  <h2>{`${profile.firstName} ${profile.lastName}`}</h2>
+                  {profile.firstName && profile.lastName &&<h2>{`${profile.firstName} ${profile.lastName}`}</h2>}
                 </section>
                 <section className="flex-1 grid gap-2  justify-items-center sm:justify-items-end">
-                  <Button>Follow</Button>
-                  <div className="flex gap-4">
-                    <span>0 follower(s)</span>
-                    <span>0 follow(s)</span>
-                    <span>0 recipe(s)</span>
-                  </div>
+                <div className="flex gap-4">
+                            <span>{`${profile.followersCount} follower(s)`}</span>
+                            <span>{`${profile.followingCount} follow(s)`}</span>
+                            <span>{`${profile.recipesCount} recipe(s)`}</span>
+                        </div>
                 </section>
               </div>
               <ProfileBioEditor
