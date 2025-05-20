@@ -2,6 +2,8 @@
 
 import { useRecipe } from "@/hooks/useRecipe";
 import Image from "next/image";
+import { CommentForm } from "./CommentForm";
+import { CommentList } from "./CommentList";
 
 interface RecipeViewProps {
   id: string;
@@ -116,9 +118,17 @@ export default function RecipeView({ id }: RecipeViewProps) {
         </div>
       )}
 
-      <div className="text-sm text-gray-500">
+      <div className="text-sm text-gray-500 mb-8">
         <p>Creado por: {recipe.username}</p>
         <p>Fecha: {new Date(recipe.createdAt).toLocaleDateString()}</p>
+      </div>
+
+      <div className="border-t pt-8">
+        <h2 className="text-2xl font-semibold mb-6">Comentarios</h2>
+        <div className="space-y-8">
+          <CommentForm recipeId={id} />
+          <CommentList recipeId={id} />
+        </div>
       </div>
     </article>
   );

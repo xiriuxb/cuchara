@@ -4,7 +4,6 @@ import RecipeCardInfo from "@/components/feed/RecipeCardInfo";
 import { useFeed } from "@/hooks/useFeed";
 import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
-import { SignedOut } from "@clerk/nextjs";
 
 export default function Home() {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isPending, error } = useFeed();
@@ -20,31 +19,28 @@ export default function Home() {
   if (error) return <div>Error: {error.message}</div>;
 
   return (
-    <SignedOut>
-      <section className="pt-4 justify-items-center px-3">
-        {data.pages.map((page) =>
-          page.data.map((recipe) => (
-            <RecipeCardInfo
-              key={recipe._id}
-              recipeInfo={{
+    <section className="pt-4 justify-items-center px-3">
+      {data.pages.map((page) =>
+        page.data.map((recipe) => (
+          <RecipeCardInfo
+            key={recipe._id}
+            recipeInfo={{
+              id: recipe._id,
+              name: recipe.name,
+              primary_image: recipe.url,
+              user: {
                 id: recipe._id,
-                name: recipe.name,
-                primary_image: recipe.url,
-                user: {
-                  id: recipe._id,
-                  user_name: recipe.username,
-                },
-                description: recipe.description,
-                created_at: recipe.createdAt,
-              }}
-            />
-          ))
-        )}
-        <div ref={ref} className="h-10 flex items-center justify-center">
-          {isFetchingNextPage && <div>Cargando más recetas...</div>}
-        </div>
-      </section>
-
-    </SignedOut>
+                user_name: recipe.username,
+              },
+              description: recipe.description,
+              created_at: recipe.createdAt,
+            }}
+          />
+        ))
+      )}
+      <div ref={ref} className="h-10 flex items-center justify-center">
+        {isFetchingNextPage && <div>Cargando más recetas...</div>}
+      </div>
+    </section>
   );
 }
