@@ -8,6 +8,7 @@ import "./globals.css";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import TopBarComponent from "@/components/TopBar";
+import { Providers } from './providers';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,22 +27,24 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <ClerkProvider>
       <html lang="en">
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased w-full h-full flex`}
         >
-          <SidebarProvider>
-            <AppSidebar />
-            <SidebarInset>
-              <TopBarComponent />
-              {children}
-            </SidebarInset>
-          </SidebarProvider>
+          <Providers>
+            <SidebarProvider>
+              <AppSidebar />
+              <SidebarInset>
+                <TopBarComponent />
+                {children}
+              </SidebarInset>
+            </SidebarProvider>
+          </Providers>
         </body>
       </html>
     </ClerkProvider>

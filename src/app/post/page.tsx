@@ -25,6 +25,8 @@ import { RecipeCreateEntity } from "@/entities/RecipeCreateEntity";
 import { createRecipeSchema } from "@/features/posts/create-post.validator";
 import Image from "next/image";
 import { useState, useRef } from "react";
+import { useCreateRecipe } from "@/hooks/useRecipe";
+import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/nextjs";
 
 const defaultValues = {
   name: "",
@@ -62,6 +64,7 @@ export default function Post() {
     defaultValues,
   });
 
+  const createRecipe = useCreateRecipe();
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -82,8 +85,8 @@ export default function Post() {
     }
   };
 
-  function onSubmit(values: RecipeCreateEntity) {
-    console.log(values);
+  async function onSubmit(values: RecipeCreateEntity) {
+      await createRecipe.mutateAsync(values);
   }
 
   const removeIngredient = (index: number) => {
@@ -95,217 +98,98 @@ export default function Post() {
   };
 
   return (
-    <div className="container mx-auto py-10 max-w-2xl">
-      <h2 className="text-2xl font-bold mb-6">Nueva Receta</h2>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="image"
-            render={() => (
-              <FormItem>
-                <FormLabel>Imagen de la receta</FormLabel>
-                <FormControl>
-                  <div className="flex flex-col gap-4">
-                    <div className="flex items-center gap-4">
-                      <Input
-                        type="file"
-                        accept="image/*"
-                        className="cursor-pointer"
-                        onChange={handleImageChange}
-                        ref={fileInputRef}
-                      />
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={handleRemoveImage}
-                        disabled={!previewUrl}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                    {previewUrl && (
-                      <div className="relative w-full h-48 rounded-lg overflow-hidden bg-muted">
-                        <Image
-                          src={previewUrl}
-                          alt="Preview"
-                          fill
-                          sizes="(max-width: 768px) 100vw, 768px"
-                          className="object-cover"
-                          priority
-                        />
-                      </div>
-                    )}
-                  </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Nombre</FormLabel>
-                <FormControl>
-                  <Input placeholder="Nombre de la receta" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Descripción</FormLabel>
-                <FormControl>
-                  <Textarea placeholder="Describe tu receta" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <div className="grid grid-cols-3 gap-4">
-            <FormField
-              control={form.control}
-              name="portions"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Porciones</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      min="1"
-                      {...field}
-                      value={field.value === 0 ? "" : field.value}
-                      onChange={(e) => {
-                        const value =
-                          e.target.value === "" ? 0 : Number(e.target.value);
-                        field.onChange(value);
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="minutes"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Tiempo (minutos)</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      min="1"
-                      placeholder="30"
-                      {...field}
-                      value={field.value === 0 ? "" : field.value}
-                      onChange={(e) => {
-                        const value =
-                          e.target.value === "" ? 0 : Number(e.target.value);
-                        field.onChange(value);
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="dificulty"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Dificultad</FormLabel>
-                  <Select
-                    onValueChange={(value) => field.onChange(Number(value))}
-                    defaultValue={field.value.toString()}
-                  >
+    <>
+      <SignedOut>
+        <RedirectToSignIn />
+      </SignedOut>
+      <SignedIn>
+        <div className="container mx-auto py-10 max-w-2xl">
+          <h2 className="text-2xl font-bold mb-6">Nueva Receta</h2>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <FormField
+                control={form.control}
+                name="image"
+                render={() => (
+                  <FormItem>
+                    <FormLabel>Imagen de la receta</FormLabel>
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecciona la dificultad" />
-                      </SelectTrigger>
+                      <div className="flex flex-col gap-4">
+                        <div className="flex items-center gap-4">
+                          <Input
+                            type="file"
+                            accept="image/*"
+                            className="cursor-pointer"
+                            onChange={handleImageChange}
+                            ref={fileInputRef}
+                          />
+                          <Button
+                            type="button"
+                            variant="outline"
+                            onClick={handleRemoveImage}
+                            disabled={!previewUrl}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                        {previewUrl && (
+                          <div className="relative w-full h-48 rounded-lg overflow-hidden bg-muted">
+                            <Image
+                              src={previewUrl}
+                              alt="Preview"
+                              fill
+                              sizes="(max-width: 768px) 100vw, 768px"
+                              className="object-cover"
+                              priority
+                            />
+                          </div>
+                        )}
+                      </div>
                     </FormControl>
-                    <SelectContent>
-                      {dificultyValues.map((val) => {
-                        return (
-                          <SelectItem key={val.id} value={val.id}>
-                            {val.name}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <FormField
-            control={form.control}
-            name="process"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Proceso</FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder="Describe el proceso paso a paso"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Nombre</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Nombre de la receta" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold">Ingredientes</h3>
-              {form.formState.errors.ingredients && (
-                <p className="text-sm text-destructive">
-                  {form.formState.errors.ingredients.message}
-                </p>
-              )}
-            </div>
-            {form.watch("ingredients").map((_, index) => (
-              <div key={index} className="flex gap-4 items-start">
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Descripción</FormLabel>
+                    <FormControl>
+                      <Textarea placeholder="Describe tu receta" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div className="grid grid-cols-3 gap-4">
                 <FormField
                   control={form.control}
-                  name={`ingredients.${index}.name`}
+                  name="portions"
                   render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormControl>
-                        <Input
-                          placeholder="Nombre del ingrediente"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name={`ingredients.${index}.quantity`}
-                  render={({ field }) => (
-                    <FormItem className="w-24">
+                    <FormItem>
+                      <FormLabel>Porciones</FormLabel>
                       <FormControl>
                         <Input
                           type="number"
-                          min="0"
-                          step="0.1"
-                          placeholder="Cantidad"
+                          min="1"
                           {...field}
                           value={field.value === 0 ? "" : field.value}
                           onChange={(e) => {
@@ -321,25 +205,54 @@ export default function Post() {
                     </FormItem>
                   )}
                 />
+
                 <FormField
                   control={form.control}
-                  name={`ingredients.${index}.unit`}
+                  name="minutes"
                   render={({ field }) => (
-                    <FormItem className="w-32">
+                    <FormItem>
+                      <FormLabel>Tiempo (minutos)</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          min="1"
+                          placeholder="30"
+                          {...field}
+                          value={field.value === 0 ? "" : field.value}
+                          onChange={(e) => {
+                            const value =
+                              e.target.value === ""
+                                ? 0
+                                : Number(e.target.value);
+                            field.onChange(value);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="dificulty"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Dificultad</FormLabel>
                       <Select
                         onValueChange={(value) => field.onChange(Number(value))}
                         defaultValue={field.value.toString()}
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Unidad" />
+                            <SelectValue placeholder="Selecciona la dificultad" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {units.map((unit) => {
+                          {dificultyValues.map((val) => {
                             return (
-                              <SelectItem key={unit.id} value={unit.id}>
-                                {unit.name}
+                              <SelectItem key={val.id} value={val.id}>
+                                {val.name}
                               </SelectItem>
                             );
                           })}
@@ -349,43 +262,152 @@ export default function Post() {
                     </FormItem>
                   )}
                 />
+              </div>
+
+              <FormField
+                control={form.control}
+                name="process"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Proceso</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Describe el proceso paso a paso"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold">Ingredientes</h3>
+                  {form.formState.errors.ingredients && (
+                    <p className="text-sm text-destructive">
+                      {form.formState.errors.ingredients.message}
+                    </p>
+                  )}
+                </div>
+                {form.watch("ingredients").map((_, index) => (
+                  <div key={index} className="flex gap-4 items-start">
+                    <FormField
+                      control={form.control}
+                      name={`ingredients.${index}.name`}
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormControl>
+                            <Input
+                              placeholder="Nombre del ingrediente"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name={`ingredients.${index}.quantity`}
+                      render={({ field }) => (
+                        <FormItem className="w-24">
+                          <FormControl>
+                            <Input
+                              type="number"
+                              min="0"
+                              step="0.1"
+                              placeholder="Cantidad"
+                              {...field}
+                              value={field.value === 0 ? "" : field.value}
+                              onChange={(e) => {
+                                const value =
+                                  e.target.value === ""
+                                    ? 0
+                                    : Number(e.target.value);
+                                field.onChange(value);
+                              }}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name={`ingredients.${index}.unit`}
+                      render={({ field }) => (
+                        <FormItem className="w-32">
+                          <Select
+                            onValueChange={(value) =>
+                              field.onChange(Number(value))
+                            }
+                            defaultValue={field.value.toString()}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Unidad" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {units.map((unit) => {
+                                return (
+                                  <SelectItem key={unit.id} value={unit.id}>
+                                    {unit.name}
+                                  </SelectItem>
+                                );
+                              })}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="h-10 w-10 shrink-0"
+                      onClick={() => {
+                        if (form.getValues("ingredients").length > 1) {
+                          removeIngredient(index);
+                        } else {
+                          form.setError("ingredients", {
+                            type: "manual",
+                            message: "Debe agregar al menos un ingrediente",
+                          });
+                        }
+                      }}
+                    >
+                      <Trash2 className="h-4 w-4 text-destructive" />
+                    </Button>
+                  </div>
+                ))}
                 <Button
                   type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="h-10 w-10 shrink-0"
-                  onClick={() => {
-                    if (form.getValues("ingredients").length > 1) {
-                      removeIngredient(index);
-                    } else {
-                      form.setError("ingredients", {
-                        type: "manual",
-                        message: "Debe agregar al menos un ingrediente",
-                      });
-                    }
-                  }}
+                  variant="outline"
+                  onClick={() =>
+                    form.setValue("ingredients", [
+                      ...form.getValues("ingredients"),
+                      { name: "", quantity: 0, unit: 1 },
+                    ])
+                  }
                 >
-                  <Trash2 className="h-4 w-4 text-destructive" />
+                  Agregar Ingrediente
                 </Button>
               </div>
-            ))}
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() =>
-                form.setValue("ingredients", [
-                  ...form.getValues("ingredients"),
-                  { name: "", quantity: 0, unit: 1 },
-                ])
-              }
-            >
-              Agregar Ingrediente
-            </Button>
-          </div>
 
-          <Button type="submit">Crear Receta</Button>
-        </form>
-      </Form>
-    </div>
+              <Button
+                type="submit"
+                disabled={createRecipe.isPending}
+                className="w-full"
+              >
+                {createRecipe.isPending ? "Creando receta..." : "Crear Receta"}
+              </Button>
+            </form>
+          </Form>
+        </div>
+      </SignedIn>
+    </>
   );
 }

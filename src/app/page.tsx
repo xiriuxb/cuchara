@@ -1,51 +1,46 @@
 "use client";
 
 import RecipeCardInfo from "@/components/feed/RecipeCardInfo";
-import { RecipeInfo } from "@/entities/RecipeInfoEntity";
-import { useAuth } from "@clerk/nextjs";
+import { useFeed } from "@/hooks/useFeed";
+import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
 
-const recipe: RecipeInfo ={
-  id:'aaaa',
-  name:'Receta 1',
-  primary_image: 'https://res.cloudinary.com/drofinqgp/image/upload/v1709856741/recipes/ts1c9xg3oe67jta1oe0d.jpg',
-  user: {
-    id: '1',
-    user_name: 'Jorge Trujillo'
-  },
-  description: 'Lorem ipsum door',
-  created_at: new Date().toISOString(),
-}
-
-
 export default function Home() {
-  const { getToken } = useAuth();
-  async function sendProtectedRequest() {
-    const token = await getToken();
-  
-    const response = await fetch('http://localhost:3000/auth/test', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-    });
-  
-    const data = await response.json();
-    console.log(data);
-  }
-  
-  useEffect(()=>{
-  sendProtectedRequest();
-  },[])
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isPending, error } = useFeed();
+  const { ref, inView } = useInView();
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  if (isPending) return <div>Cargando recetas...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+
   return (
     <section className="pt-4 justify-items-center px-3">
-      <RecipeCardInfo recipeInfo={recipe} />
-      <RecipeCardInfo recipeInfo={recipe} />
-      <RecipeCardInfo recipeInfo={recipe} />
-      <RecipeCardInfo recipeInfo={recipe} />
-      <RecipeCardInfo recipeInfo={recipe} />
-      <RecipeCardInfo recipeInfo={recipe} />
+      {data.pages.map((page) =>
+        page.data.map((recipe) => (
+          <RecipeCardInfo
+            key={recipe._id}
+            recipeInfo={{
+              id: recipe._id,
+              name: recipe.name,
+              primary_image: recipe.url,
+              user: {
+                id: recipe._id,
+                user_name: recipe.username,
+              },
+              description: recipe.description,
+              created_at: recipe.createdAt,
+            }}
+          />
+        ))
+      )}
+      <div ref={ref} className="h-10 flex items-center justify-center">
+        {isFetchingNextPage && <div>Cargando más recetas...</div>}
+      </div>
     </section>
   );
 }

@@ -8,7 +8,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { ConditionalLink } from "./ConditionalLink";
 import Link from "next/link";
 
 export function NavProjects({
@@ -26,17 +25,12 @@ export function NavProjects({
         {projects.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild className="text-base">
-              {item.url === "/" ? (
+              {
                 <Link href={item.url} className="py-6 px-4">
                   <item.icon />
                   <span>{item.name}</span>
                 </Link>
-              ) : (
-                <ConditionalLink href={item.url} className="py-6 px-4">
-                  <item.icon />
-                  <span>{item.name}</span>
-                </ConditionalLink>
-              )}
+              }
             </SidebarMenuButton>
           </SidebarMenuItem>
         ))}

@@ -16,7 +16,7 @@ export default function RecipeCardInfo({
           {new Date(recipeInfo.created_at).toLocaleDateString("es-EC")}
         </p>
       </div>
-      <ConditionalLink href={`/detail?dishID=${recipeInfo.id}`}>
+      <ConditionalLink href={`/recipe/${recipeInfo.id}`}>
         <img
           className="w-full max-h-[230px] md:max-h-[350px] object-cover"
           src={recipeInfo.primary_image}
@@ -35,7 +35,7 @@ export default function RecipeCardInfo({
           <button className="flex justify-center item-center pr-2"></button>
         </div>
       </div>
-      <ConditionalLink href={`/detail?dishID=${recipeInfo.id}`}>
+      <ConditionalLink href={`/recipe/${recipeInfo.id}`}>
         <h3 id="name" className="pb-2 px-3 text-lg font-bold">
           {recipeInfo.name}
         </h3>
