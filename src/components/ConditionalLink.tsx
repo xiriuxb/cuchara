@@ -1,6 +1,6 @@
 'use client'
 
-import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import Link from "next/link";
 
 type ConditionalLinkProps = {
@@ -15,17 +15,20 @@ export function ConditionalLink({
   children,
   className,
 }: ConditionalLinkProps) {
-
   return (
     <>
-    <SignedIn>
-      <Link href={href} className={className}>
-        {children}
-      </Link>
-    </SignedIn>
-    <SignedOut>
-      <RedirectToSignIn />
-    </SignedOut>
+      <SignedIn>
+        <Link href={href} className={className}>
+          {children}
+        </Link>
+      </SignedIn>
+      <SignedOut>
+        <SignInButton mode="modal">
+          <button className={className}>
+            {children}
+          </button>
+        </SignInButton>
+      </SignedOut>
     </>
   );
 }

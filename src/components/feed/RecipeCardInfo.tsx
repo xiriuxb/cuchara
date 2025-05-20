@@ -1,5 +1,6 @@
 import { RecipeInfo } from "@/entities/RecipeInfoEntity";
 import { ConditionalLink } from "../ConditionalLink";
+import Image from "next/image";
 
 export default function RecipeCardInfo({
   recipeInfo,
@@ -16,13 +17,18 @@ export default function RecipeCardInfo({
           {new Date(recipeInfo.created_at).toLocaleDateString("es-EC")}
         </p>
       </div>
-      <ConditionalLink href={`/recipe/${recipeInfo.id}`}>
-        <img
-          className="w-full max-h-[230px] md:max-h-[350px] object-cover"
-          src={recipeInfo.primary_image}
-          alt=""
-        />
-      </ConditionalLink>
+      <div className="relative w-full aspect-[16/9]">
+        <ConditionalLink href={`/recipe/${recipeInfo.id}`} className="block w-full h-full">
+          <Image
+            className="object-cover rounded-sm"
+            src={recipeInfo.primary_image}
+            alt={recipeInfo.name}
+            fill
+            sizes="(max-width: 768px) 100vw, 900px"
+            priority
+          />
+        </ConditionalLink>
+      </div>
       <div className="flex justify-between items-center py-3">
         <div className="flex flex-row">
           {/* Likes compoent */}
