@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation } from "@tanstack/react-query";
-import { RecipeService, ApiResponse, ApiError } from "@/services/recipeService";
+import { RecipeService, ApiError } from "@/services/recipeService";
 import { RecipeCreateEntity } from "@/entities/RecipeCreateEntity";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
@@ -11,14 +11,13 @@ export const useCreateRecipe = () => {
   const { getToken } = useAuth();
   const router = useRouter();
 
-  return useMutation<ApiResponse<any>, ApiError, RecipeCreateEntity>({
+  return useMutation<Recipe, ApiError, RecipeCreateEntity>({
     mutationFn: async (recipe: RecipeCreateEntity) => {
       const token = await getToken();
       if (!token) throw new Error("No authentication token available");
       return RecipeService.createRecipe(recipe, token);
     },
-    onSuccess: (data: ApiResponse<any>) => {
-      console.log("Recipe created successfully:", data);
+    onSuccess: (data: Recipe) => {
       router.replace(`/recipe/${data._id}`)
     },
     onError: (error: ApiError) => {

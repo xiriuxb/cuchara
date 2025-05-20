@@ -62,7 +62,7 @@ export class RecipeService {
   static async createRecipe(
     recipe: RecipeCreateEntity,
     token: string
-  ): Promise<ApiResponse<any>> {
+  ): Promise<Recipe> {
     try {
       const formData = new FormData();
 
@@ -87,7 +87,7 @@ export class RecipeService {
         formData.append("image", recipe.image);
       }
 
-      const { data } = await this.api.post<ApiResponse<any>>(
+      const { data } = await this.api.post<Recipe>(
         "/recipes",
         formData,
         {
