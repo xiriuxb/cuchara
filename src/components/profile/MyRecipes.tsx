@@ -23,7 +23,7 @@ export default function MyRecipes() {
     <section className=" container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-[900px]">
       {data.pages.map((page) =>
         page.data.map((recipe) => (
-          <RecipeCardComponent id={recipe._id} name={recipe.name} url={recipe.url} />
+          <RecipeCardComponent key={recipe._id} id={recipe._id} name={recipe.name} url={recipe.url} />
         ))
       )}
       <div ref={ref} className="h-10 flex items-center justify-center">

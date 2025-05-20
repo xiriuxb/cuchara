@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { RecipeCreateEntity } from "@/entities/RecipeCreateEntity";
 import axios, { AxiosError } from "axios";
 
@@ -85,7 +86,6 @@ export class RecipeService {
       if (recipe.image) {
         formData.append("image", recipe.image);
       }
-      console.log(recipe);
 
       const { data } = await this.api.post<ApiResponse<any>>(
         "/recipes",

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation } from "@tanstack/react-query";
 import { RecipeService, ApiResponse, ApiError } from "@/services/recipeService";
 import { RecipeCreateEntity } from "@/entities/RecipeCreateEntity";
@@ -18,6 +19,7 @@ export const useCreateRecipe = () => {
     },
     onSuccess: (data: ApiResponse<any>) => {
       console.log("Recipe created successfully:", data);
+      router.replace(`/recipe/${data._id}`)
     },
     onError: (error: ApiError) => {
       console.error("Error creating recipe:", error.message);
