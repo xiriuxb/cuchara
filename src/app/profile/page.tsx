@@ -3,7 +3,6 @@
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useProfile } from "@/hooks/useProfile";
-import { SignedIn, SignedOut, RedirectToSignIn } from "@clerk/nextjs";
 import { AvatarFallback } from "@radix-ui/react-avatar";
 import { Edit, Check, X } from "lucide-react";
 import { useState } from "react";
@@ -16,42 +15,39 @@ export default function ProfilePage() {
 
   return (
     <>
-      <SignedOut>
-        <RedirectToSignIn />
-      </SignedOut>
-      <SignedIn>
-        {isPending && <ProfileSkeleton />}
-        {error && <div>Error: {error.message}</div>}
-        {profile && (
-          <section className="container mx-auto py-2 max-w-4xl">
-            <div className="bg-muted p-4 rounded-lg overflow-auto flex flex-col gap-2">
-              <div className="flex flex-col sm:flex-row sm:gap-4 place-items-center sm:place-items-start">
-                <Avatar className="size-20">
-                  <AvatarImage src={profile.imageUrl!} />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-                <section className="flex flex-col justify-between py-3">
-                  <span className="font-bold">{`@${profile.username}`}</span>
-                  {profile.firstName && profile.lastName &&<h2>{`${profile.firstName} ${profile.lastName}`}</h2>}
-                </section>
-                <section className="flex-1 grid gap-2  justify-items-center sm:justify-items-end">
+      {isPending && <ProfileSkeleton />}
+      {error && <div>Error: {error.message}</div>}
+      {profile && (
+        <section className="container mx-auto py-2 max-w-4xl">
+          <div className="bg-muted p-4 rounded-lg overflow-auto flex flex-col gap-2">
+            <div className="flex flex-col sm:flex-row sm:gap-4 place-items-center sm:place-items-start">
+              <Avatar className="size-20">
+                <AvatarImage src={profile.imageUrl!} />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+              <section className="flex flex-col justify-between py-3">
+                <span className="font-bold">{`@${profile.username}`}</span>
+                {profile.firstName && profile.lastName && (
+                  <h2>{`${profile.firstName} ${profile.lastName}`}</h2>
+                )}
+              </section>
+              <section className="flex-1 grid gap-2  justify-items-center sm:justify-items-end">
                 <div className="flex gap-4">
-                            <span>{`${profile.followersCount} follower(s)`}</span>
-                            <span>{`${profile.followingCount} follow(s)`}</span>
-                            <span>{`${profile.recipesCount} recipe(s)`}</span>
-                        </div>
-                </section>
-              </div>
-              <ProfileBioEditor
-                bio={profile.bio}
-                updateProfile={updateProfile}
-                isPending={updateProfile.isPending}
-              />
+                  <span>{`${profile.followersCount} follower(s)`}</span>
+                  <span>{`${profile.followingCount} follow(s)`}</span>
+                  <span>{`${profile.recipesCount} recipe(s)`}</span>
+                </div>
+              </section>
             </div>
-          </section>
-        )}
-        <MyRecipes/>
-      </SignedIn>
+            <ProfileBioEditor
+              bio={profile.bio}
+              updateProfile={updateProfile}
+              isPending={updateProfile.isPending}
+            />
+          </div>
+        </section>
+      )}
+      <MyRecipes />
     </>
   );
 }
@@ -63,7 +59,7 @@ function ProfileBioEditor({
 }: {
   bio?: string;
   updateProfile: {
-    mutateAsync: (bio: string) => Promise<{bio:string}>;
+    mutateAsync: (bio: string) => Promise<{ bio: string }>;
     isPending: boolean;
   };
   isPending: boolean;

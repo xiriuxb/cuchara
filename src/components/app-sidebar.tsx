@@ -1,24 +1,23 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
   Home,
   Search,
   BookmarkIcon,
-  ThumbsUp,
   CircleUserIcon,
-  GalleryVertical
-} from "lucide-react"
+  GalleryVertical,
+} from "lucide-react";
 
-import { NavProjects } from "@/components/nav-projects"
 import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
   SidebarRail,
   SidebarTrigger,
-} from "@/components/ui/sidebar"
-import { NavMain } from "./nav-main"
+} from "@/components/ui/sidebar";
+import { NavMain } from "./nav-main";
+import Link from "next/link";
 
 // This is sample data.
 const data = {
@@ -49,13 +48,13 @@ const data = {
       icon: CircleUserIcon,
     },
   ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        Cuchara
+        <Link href={"/"}>Cuchara</Link>
       </SidebarHeader>
       <SidebarTrigger className="ml-2" />
       <SidebarContent>
@@ -63,5 +62,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }
