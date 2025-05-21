@@ -7,6 +7,7 @@ export interface FeedRecipe {
   url: string;
   createdAt: string;
   username: string;
+  likesCount: number;
 }
 
 export interface FeedResponse {

@@ -34,6 +34,7 @@ export default function Home() {
               },
               description: recipe.description,
               created_at: recipe.createdAt,
+              likesCount: recipe.likesCount,
             }}
           />
         ))

@@ -1,6 +1,7 @@
 import { RecipeInfo } from "@/entities/RecipeInfoEntity";
 import { ConditionalLink } from "../ConditionalLink";
 import Image from "next/image";
+import { RecipeInteractions } from "../recipe/RecipeInteractions";
 
 export default function RecipeCardInfo({
   recipeInfo,
@@ -29,17 +30,8 @@ export default function RecipeCardInfo({
           />
         </ConditionalLink>
       </div>
-      <div className="flex justify-between items-center py-3">
-        <div className="flex flex-row">
-          {/* Likes compoent */}
-          <button
-            data-bookmark-id={recipeInfo?.id}
-            className="flex seft-start item-center gap-x-2 pl-2"
-          ></button>
-        </div>
-        <div>
-          <button className="flex justify-center item-center pr-2"></button>
-        </div>
+      <div className="flex justify-between items-center py-2">
+        <RecipeInteractions likesCount={recipeInfo.likesCount} recipeId={recipeInfo.id} />
       </div>
       <ConditionalLink href={`/recipe/${recipeInfo.id}`}>
         <h3 id="name" className="pb-2 px-3 text-lg font-bold">
