@@ -86,4 +86,4 @@
 - Gracias Midu
 
 ## Link al back
-[https://github.com/xiriuxb/cuchara-back])https://github.com/xiriuxb/cuchara-back)
+[https://github.com/xiriuxb/cuchara-back](https://github.com/xiriuxb/cuchara-back)
