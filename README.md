@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div align="center" id="readme-top">
+  <h1>Cuchara</h1>
+  <p align="center">
+    <b>Cuchara</b> es una red social enfocada en compartir recetas. También podrás vender ingredientes para estas.
+  </p>
+  <a href="https://cuchara-five.vercel.app/"> Mira Cuchara </a>
+</div>
 
-## Getting Started
+<details>
+  <summary>Tabla de Contenidos</summary>
+  <ol>
+    <li><a href="#🔍-sobre-el-proyecto">🔍 Sobre el Proyecto</a></li>
+    <li><a href="#🔐-uso-de-clerk">🔐 Uso de Clerk</a></li>
+    <li><a href="#🛠️-stack-tecnológico">🛠️ Stack Tecnológico</a></li>
+    <li><a href="#📸-capturas">📸 Capturas</a></li>
+    <li><a href="#👥-equipo">👥 Equipo</a></li>
+  </ol>
+</details>
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🔍 Sobre el Proyecto
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Cuchara** nace por el gusto a la comida y las ganas de compartir recetas que tal vez todos conocemos pero que cada uno le pone su toque personal. Además con la futura función de venta\intercambio de ingredientes se busca apoyar al comercio local.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🔐 Uso de Clerk
 
-## Learn More
+**Clerk** se utiliza para el registro y autenticación de usuarios.
+- La app tiene un feed público pero, tanto las otras páginas, como ciertas funciones están protegidas y en caso de querer navegar o usarlas, respectivamente, será redirgido al login de clerk.
+- La autenticación\autorización en el *Backend* se hace con el mismo token de Clerk, el cual es validado también en este.
+- También se usó los **webhooks** de `user.create` y `user.update` de Clerk, en el Backend, para mantener sincronizados algunos datos básicos del usuario.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🛠️ Stack Tecnológico
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+[![Clerk][Clerk.js]][Clerk-url]
+[![Next.js][Next.js]][Next-url]
+[![NestJS][NestJS]][NestJS-url]
+[![MongoDB][MongoDB]][MongoDB-url]
+[![ShadCN][ShadCN]][ShadCN-url]
+[![Tailwind][TailwindCSS]][Tailwind-url]
+[![Cloudinary][Cloudinary]][Cloudinary-url]
+[![Vercel][Vercel]][Vercel-url]
+[![Ngrok][Ngrok]][Ngrok-url]
 
-## Deploy on Vercel
+<!-- Badges URLs -->
+[Next.js]: https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
+[Next-url]: https://nextjs.org/
+[TailwindCSS]: https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwind-css&logoColor=white
+[Tailwind-url]: https://tailwindcss.com/
+[Clerk.js]: https://img.shields.io/badge/Clerk-000000?style=for-the-badge&logo=clerk&logoColor=white
+[Clerk-url]: https://clerk.com/
+[NestJS]: https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white
+[NestJS-url]: https://nestjs.com/
+[ShadCN]: https://img.shields.io/badge/ShadCN-111827?style=for-the-badge&logo=radix-ui&logoColor=white
+[ShadCN-url]: https://ui.shadcn.dev/
+[Ngrok]: https://img.shields.io/badge/Ngrok-1F1F1F?style=for-the-badge&logo=ngrok&logoColor=white
+[Ngrok-url]: https://ngrok.com/
+[MongoDB]: https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white
+[MongoDB-url]: https://www.mongodb.com/
+[Cloudinary]: https://img.shields.io/badge/Cloudinary-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white
+[Cloudinary-url]: https://cloudinary.com/
+[Vercel]: https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white
+[Vercel-url]: https://vercel.com/
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📸 Capturas
+
+> TODO()
+
+---
+
+## 👥 Equipo
+
+- [Jorge Trujillo](https://github.com/xiriuxb) – Fullstack developer
+- ChatGPT 4.o
+
+---
+
+## 🎉 Agradecimiento
+
+- Gracias Midu
