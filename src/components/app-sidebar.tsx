@@ -18,42 +18,33 @@ import {
   SidebarRail,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
+import { NavMain } from "./nav-main"
 
 // This is sample data.
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   projects: [
     {
-      name: "Home",
+      title: "Home",
       url: "/",
       icon: Home,
     },
     {
-      name: "Posts",
+      title: "New Post",
       url: "/post",
       icon: GalleryVertical,
     },
     {
-      name: "Search",
+      title: "Search",
       url: "#",
       icon: Search,
     },
     {
-      name: "Bookmark",
+      title: "Bookmark",
       url: "#",
       icon: BookmarkIcon,
     },
     {
-      name: "Favorites",
-      url: "#",
-      icon: ThumbsUp,
-    },
-    {
-      name: "Profile",
+      title: "Profile",
       url: "/profile",
       icon: CircleUserIcon,
     },
@@ -68,7 +59,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarTrigger className="ml-2" />
       <SidebarContent>
-        <NavProjects projects={data.projects} />
+        <NavMain items={data.projects} />
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
