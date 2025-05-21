@@ -41,6 +41,7 @@ export interface Recipe {
   dificulty?: number;
   process?: string;
   ingredients?: RecipeIngredient[];
+  likesCount: number;
 }
 
 export interface RecipeResponse {
@@ -87,16 +88,12 @@ export class RecipeService {
         formData.append("image", recipe.image);
       }
 
-      const { data } = await this.api.post<Recipe>(
-        "/recipes",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const { data } = await this.api.post<Recipe>("/recipes", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       return data;
     } catch (error: unknown) {
@@ -112,11 +109,14 @@ export class RecipeService {
     }
   }
 
-  static async getMyRecipes(token: string, cursor?: string): Promise<RecipeResponse> {
+  static async getMyRecipes(
+    token: string,
+    cursor?: string
+  ): Promise<RecipeResponse> {
     try {
-      const { data } = await this.api.get<RecipeResponse>('/recipes/my', {
+      const { data } = await this.api.get<RecipeResponse>("/recipes/my", {
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
         params: {
           cursor,
@@ -132,7 +132,7 @@ export class RecipeService {
         } as ApiError;
       }
       throw {
-        message: 'An unexpected error occurred',
+        message: "An unexpected error occurred",
       } as ApiError;
     }
   }
@@ -141,7 +141,7 @@ export class RecipeService {
     try {
       const { data } = await this.api.get<Recipe>(`/recipes/${id}`, {
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       return data;
@@ -153,19 +153,26 @@ export class RecipeService {
         } as ApiError;
       }
       throw {
-        message: 'An unexpected error occurred',
+        message: "An unexpected error occurred",
       } as ApiError;
     }
   }
 
-  static async getUserRecipes(username: string, token: string, cursor?: string): Promise<PaginatedResponse<Recipe>> {
+  static async getUserRecipes(
+    username: string,
+    token: string,
+    cursor?: string
+  ): Promise<PaginatedResponse<Recipe>> {
     try {
-      const { data } = await this.api.get<PaginatedResponse<Recipe>>(`/recipes/user/${username}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-        params: { cursor },
-      });
+      const { data } = await this.api.get<PaginatedResponse<Recipe>>(
+        `/recipes/user/${username}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params: { cursor },
+        }
+      );
       return data;
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
@@ -175,7 +182,7 @@ export class RecipeService {
         } as ApiError;
       }
       throw {
-        message: 'An unexpected error occurred',
+        message: "An unexpected error occurred",
       } as ApiError;
     }
   }

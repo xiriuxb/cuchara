@@ -4,6 +4,7 @@ import { useRecipe } from "@/hooks/useRecipe";
 import Image from "next/image";
 import { CommentForm } from "./CommentForm";
 import { CommentList } from "./CommentList";
+import { RecipeInteractions } from "./RecipeInteractions";
 
 interface RecipeViewProps {
   id: string;
@@ -70,7 +71,10 @@ export default function RecipeView({ id }: RecipeViewProps) {
         />
       </div>
 
-      <h1 className="text-3xl font-bold mb-4">{recipe.name}</h1>
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-3xl font-bold">{recipe.name}</h1>
+        <RecipeInteractions recipeId={id} likesCount={recipe.likesCount || 0} />
+      </div>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         {recipe.portions && (

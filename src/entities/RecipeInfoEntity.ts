@@ -5,6 +5,7 @@ export interface RecipeInfo {
   primary_image: string;
   description?: string;
   user: RecipeUser;
+  likesCount: number;
 }
 
 interface RecipeUser {

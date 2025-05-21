@@ -27,6 +27,7 @@ import Image from "next/image";
 import { useState, useRef } from "react";
 import { useCreateRecipe } from "@/hooks/useRecipe";
 import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/nextjs";
+import { toast } from "sonner";
 
 const defaultValues = {
   name: "",
@@ -71,6 +72,24 @@ export default function Post() {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
+      if (!allowedTypes.includes(file.type)) {
+        form.setError("image", {
+          type: "manual",
+          message: "Solo se permiten archivos PNG, JPG y JPEG"
+        });
+        return;
+      }
+
+      const maxSize = 5 * 1024 * 1024; // 5MB en bytes
+      if (file.size > maxSize) {
+        form.setError("image", {
+          type: "manual",
+          message: "El tamaño máximo permitido es 5MB"
+        });
+        return;
+      }
+
       form.setValue("image", file);
       const url = URL.createObjectURL(file);
       setPreviewUrl(url);
@@ -86,7 +105,14 @@ export default function Post() {
   };
 
   async function onSubmit(values: RecipeCreateEntity) {
+    try {
       await createRecipe.mutateAsync(values);
+    } catch (error) {
+      console.log(error)
+      toast.error('Error al crear la receta', {
+        description: 'Hubo un problema al crear la receta. Por favor, intenta de nuevo.'
+      });
+    }
   }
 
   const removeIngredient = (index: number) => {
